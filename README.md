@@ -9,3 +9,5 @@ $ git clone https://github.com/Verkuator/EstesisTest.git
 После скачивания нужно создать докер контейнер
 
 $ docker-compose up --build
+
+После этого перейдите по адрессу <http://127.0.0.1:8000/docs#/> для ознакомления с документацией
