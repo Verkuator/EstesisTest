@@ -21,8 +21,8 @@ class CourierCreate(CourierBase):
 
 class CourierInfo(CourierRead):
     active_order: Optional["OrderInfo"]
-    avg_order_complete_time: Optional[datetime.timedelta]
-    avg_day_orders: Optional[int]
+    avg_order_complete_time: datetime.timedelta
+    avg_day_orders: int
     
     
 class OrderBase(BaseModel):
