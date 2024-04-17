@@ -4,31 +4,7 @@ from fastapi import APIRouter, Depends, exceptions, status
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from app import schemas, crud, models
-
-
-def calc_avg_order_complete_time(
-        total_orders: int,
-        completed_orders: list[models.Order]
-) -> datetime.timedelta:
-    total_time = datetime.timedelta(seconds=0)
-    
-    for order in completed_orders:
-        total_time += (order.finish_time - order.start_time)
-     
-    if total_orders > 0:
-        avg_order_complete_time = total_time / total_orders
-    else:
-        avg_order_complete_time = 0
-    return avg_order_complete_time
-
-
-def calc_avg_day_orders(total_orders: int, days_with_orders: int) -> int:
-    if days_with_orders > 0:
-        avg_day_orders = total_orders // days_with_orders
-    else:
-        avg_day_orders = 0
-    return avg_day_orders
+from app import schemas, crud, helpers
     
 
 router = APIRouter(
@@ -84,13 +60,13 @@ def read_courier_info(id: int, db: Session = Depends(get_db)):
                                for order in completed_orders))
     total_orders = len(completed_orders)
 
-    avg_order_complete_time = calc_avg_order_complete_time(
+    avg_order_complete_time = helpers.calc_avg_order_complete_time(
         total_orders=total_orders,
         completed_orders=completed_orders
     )
     
     # Рассчет среднего количества заказов в день
-    avg_day_orders = calc_avg_day_orders(total_orders=total_orders,
+    avg_day_orders = helpers.calc_avg_day_orders(total_orders=total_orders,
                                          days_with_orders=days_with_orders)
     
     return schemas.CourierInfo(
